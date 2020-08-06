@@ -14,45 +14,52 @@
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2Yoh_C1l9AZ7GUp5rP_avurGTYuHb6YM&callback=initMap"></script>
   <script>
     var places = [
-    [48.597086, 35.271555,'1. Goodzone','Днепр. 19.08-21.08','icon-2.png'],
-    [50.301312, 34.897059,'2. Ахтырка','Ахтырка 21.08-23.08','icon-2.png'],
-    [49.457650, 32.052206,'3. Черкассы','Черкассы, Белый лотос 23.08','icon-2.png'],
-    [49.816896, 30.054210,'4. Белая Церковь','Белая Церковь - Полет на Шарах. 24.08','icon-2.png'],
-    [49.840456, 29.663380,'5. Буки','Буки - Ландшафтный Парк. 24.08','icon-2.png'],
-    [50.479368, 29.215942,'6. Радомышшль','Радомышль - Замок. 25.08','icon-2.png'],
-    [50.316468, 29.093868,'7. Коростышев','Коростышевский каньон. 25.08','icon-2.png'],
-    [50.039914, 28.683552,'8. Домик Рыбака','Домик Рыбака. 26.08','icon-2.png'],
-    [49.225138, 23.344169,'9. Сходница','Сходница - Валерия. 26.08','icon-2.png'],
-    [48.674056, 26.560941,'10. Каменец Подольский','Каменец-Подольский. Крепость 27.08','icon-2.png'],
-    [48.674056, 26.560941,'10. Каменец Подольский','Каменец-Подольский. Крепость 27.08','icon-2.png'],
+      [48.597086, 35.271555,'1. Goodzone','Днепр. 19.08-21.08','icon-2.png'],
+      [50.301312, 34.897059,'2. Ахтырка','Ахтырка 21.08-23.08','icon-2.png'],
+      [49.457650, 32.052206,'3. Черкассы','Черкассы, Белый лотос 23.08','icon-2.png'],
+      [49.816896, 30.054210,'4. Белая Церковь','Белая Церковь - Полет на Шарах. 24.08','icon-2.png'],
+      [49.840456, 29.663380,'5. Буки','Буки - Ландшафтный Парк. 24.08','icon-2.png'],
+      [50.479368, 29.215942,'6. Радомышшль','Радомышль - Замок. 25.08','icon-2.png'],
+      [50.316468, 29.093868,'7. Коростышев','Коростышевский каньон. 25.08','icon-2.png'],
+      [50.039914, 28.683552,'8. Домик Рыбака','Домик Рыбака. 26.08','icon-2.png'],
+      [49.225138, 23.344169,'9. Сходница','Сходница - Валерия. 26.08','icon-2.png'],
+      [48.674056, 26.560941,'10. Каменец Подольский','Каменец-Подольский. Крепость 27.08','icon-2.png'],
+      [48.674056, 26.560941,'10. Каменец Подольский','Каменец-Подольский. Крепость 27.08','icon-2.png'],
     ];
+
     function initMap() {
       var mapCenter = {
         lat: 49.416989,
         lng: 29.269789
       };
+
       var map = new google.maps.Map(document.getElementById('gmap'), {
         zoom: 7,
         center: mapCenter
       });
+      
       setMarkers(map);
     }
+
     function setMarkers(map) {
       var baseUrl = 'images/';
+
       var image = {
         url: '',
         size: new google.maps.Size(30, 30),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(15, 15)
       };
+
       var shape = {
         coords: [1,1,1,30,30,30,30,1],
         type: 'poly'
       };
-      ;
+
       for (var i = 0; i < places.length; i++) {
         var place = places[i];
         image.url = baseUrl + place[4];
+
         var marker = new google.maps.Marker({
           position: {
             lat: place[0],
@@ -64,13 +71,15 @@
           title: place[2],
           zIndex: i + 1
         });
+
         var infoWindow = new google.maps.InfoWindow();
         var content = place[3];
-        google.maps.event.addListener(marker, 'click', (function (marker, content, infoWindow) {
+
+        google.maps.event.addListener(marker, 'click', (function (marker, content, infoWindow){
           return function () {
             infoWindow.setContent(content);
             infoWindow.open(map, marker);
-          };
+          }
         }) (marker, content, infoWindow));
       }
     }
