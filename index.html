@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>MAP</title>
+  <link rel="icon" href="images/favicon.png">
   <style>
-    * {margin:0;padding:0;border:0;}
-    .gmap {position: relative;width: 100vw;height: 100vh;}    
+    *{margin:0;padding:0;border:0;}
+    #gmap{position:relative;width:100vw;height:100vh;}    
   </style>
 </head>
 <body>
-  <div class="col-md-12 gmap" id="gmap"></div>
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+  <div id="gmap"></div>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2Yoh_C1l9AZ7GUp5rP_avurGTYuHb6YM&callback=initMap"></script>
   <script>
     var places = [
@@ -23,6 +23,7 @@
     [50.316468, 29.093868,'7. Коростышев','Коростышевский каньон. 25.08','icon-2.png'],
     [50.039914, 28.683552,'8. Домик Рыбака','Домик Рыбака. 26.08','icon-2.png'],
     [49.225138, 23.344169,'9. Сходница','Сходница - Валерия. 26.08','icon-2.png'],
+    [48.674056, 26.560941,'10. Каменец Подольский','Каменец-Подольский. Крепость 27.08','icon-2.png'],
     [48.674056, 26.560941,'10. Каменец Подольский','Каменец-Подольский. Крепость 27.08','icon-2.png'],
     ];
     function initMap() {
