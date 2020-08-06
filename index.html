@@ -37,7 +37,7 @@
         zoom: 7,
         center: mapCenter
       });
-      
+
       setMarkers(map);
     }
 
@@ -83,6 +83,22 @@
         }) (marker, content, infoWindow));
       }
     }
+
+    directionsDisplay = new google.maps.DirectionsRenderer();
+
+    var request = {
+        origin: new google.maps.LatLng(60.023539414725356,30.283663272857666), //точка старта
+        destination: new google.maps.LatLng(59.79530896374892,30.410317182540894), //точка финиша
+        travelMode: google.maps.DirectionsTravelMode.DRIVING //режим прокладки маршрута
+      };
+
+      directionsService.route(request, function(response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+          directionsDisplay.setDirections(response);
+        }
+      });
+
+      directionsDisplay.setMap(map);
   </script>
 
 </body>
