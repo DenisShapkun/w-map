@@ -10,96 +10,220 @@
   </style>
 </head>
 <body>
-  <div id="gmap"></div>
+  <!-- <div id="gmap"></div> -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2Yoh_C1l9AZ7GUp5rP_avurGTYuHb6YM&callback=initMap"></script>
   <script>
-    var places = [
-      [48.597086, 35.271555,'1. Goodzone','Днепр. 19.08-21.08','icon-2.png'],
-      [50.301312, 34.897059,'2. Ахтырка','Ахтырка 21.08-23.08','icon-2.png'],
-      [49.457650, 32.052206,'3. Черкассы','Черкассы, Белый лотос 23.08','icon-2.png'],
-      [49.816896, 30.054210,'4. Белая Церковь','Белая Церковь - Полет на Шарах. 24.08','icon-2.png'],
-      [49.840456, 29.663380,'5. Буки','Буки - Ландшафтный Парк. 24.08','icon-2.png'],
-      [50.479368, 29.215942,'6. Радомышшль','Радомышль - Замок. 25.08','icon-2.png'],
-      [50.316468, 29.093868,'7. Коростышев','Коростышевский каньон. 25.08','icon-2.png'],
-      [50.039914, 28.683552,'8. Домик Рыбака','Домик Рыбака. 26.08','icon-2.png'],
-      [49.225138, 23.344169,'9. Сходница','Сходница - Валерия. 26.08','icon-2.png'],
-      [48.674056, 26.560941,'10. Каменец Подольский','Каменец-Подольский. Крепость 27.08','icon-2.png'],
-      [48.674056, 26.560941,'10. Каменец Подольский','Каменец-Подольский. Крепость 27.08','icon-2.png'],
-    ];
+    // var places = [
+    //   [48.597086, 35.271555,'1. Goodzone','Днепр. 19.08-21.08','icon-2.png'],
+    //   [50.301312, 34.897059,'2. Ахтырка','Ахтырка 21.08-23.08','icon-2.png'],
+    //   [49.457650, 32.052206,'3. Черкассы','Черкассы, Белый лотос 23.08','icon-2.png'],
+    //   [49.816896, 30.054210,'4. Белая Церковь','Белая Церковь - Полет на Шарах. 24.08','icon-2.png'],
+    //   [49.840456, 29.663380,'5. Буки','Буки - Ландшафтный Парк. 24.08','icon-2.png'],
+    //   [50.479368, 29.215942,'6. Радомышшль','Радомышль - Замок. 25.08','icon-2.png'],
+    //   [50.316468, 29.093868,'7. Коростышев','Коростышевский каньон. 25.08','icon-2.png'],
+    //   [50.039914, 28.683552,'8. Домик Рыбака','Домик Рыбака. 26.08','icon-2.png'],
+    //   [49.225138, 23.344169,'9. Сходница','Сходница - Валерия. 26.08','icon-2.png'],
+    //   [48.674056, 26.560941,'10. Каменец Подольский','Каменец-Подольский. Крепость 27.08','icon-2.png'],
+    //   [48.674056, 26.560941,'10. Каменец Подольский','Каменец-Подольский. Крепость 27.08','icon-2.png'],
+    // ];
+
+    // function initMap() {
+    //   var mapCenter = {
+    //     lat: 49.416989,
+    //     lng: 29.269789
+    //   };
+
+    //   var map = new google.maps.Map(document.getElementById('gmap'), {
+    //     zoom: 7,
+    //     center: mapCenter
+    //   });
+
+    //   setMarkers(map);
+    // }
+
+    // function setMarkers(map) {
+    //   var baseUrl = 'images/';
+
+    //   var image = {
+    //     url: '',
+    //     size: new google.maps.Size(30, 30),
+    //     origin: new google.maps.Point(0, 0),
+    //     anchor: new google.maps.Point(15, 15)
+    //   };
+
+    //   var shape = {
+    //     coords: [1,1,1,30,30,30,30,1],
+    //     type: 'poly'
+    //   };
+
+    //   for (var i = 0; i < places.length; i++) {
+    //     var place = places[i];
+    //     image.url = baseUrl + place[4];
+
+    //     var marker = new google.maps.Marker({
+    //       position: {
+    //         lat: place[0],
+    //         lng: place[1]
+    //       },
+    //       map: map,
+    //       icon: image,
+    //       shape: shape,
+    //       title: place[2],
+    //       zIndex: i + 1
+    //     });
+
+    //     var infoWindow = new google.maps.InfoWindow();
+    //     var content = place[3];
+
+    //     google.maps.event.addListener(marker, 'click', (function (marker, content, infoWindow){
+    //       return function () {
+    //         infoWindow.setContent(content);
+    //         infoWindow.open(map, marker);
+    //       }
+    //     }) (marker, content, infoWindow));
+    //   }
+    // }
 
     function initMap() {
-      var mapCenter = {
-        lat: 49.416989,
-        lng: 29.269789
-      };
-
-      var map = new google.maps.Map(document.getElementById('gmap'), {
+      const directionsService = new google.maps.DirectionsService();
+      const directionsRenderer = new google.maps.DirectionsRenderer();
+      const map = new google.maps.Map(document.getElementById("map"), {
         zoom: 7,
-        center: mapCenter
+        center: { lat: 49.416989, lng: 29.269789 }
       });
-
-      setMarkers(map);
+      directionsRenderer.setMap(map);
+      document.getElementById("submit").addEventListener("click", () => {
+        calculateAndDisplayRoute(directionsService, directionsRenderer);
+      });
     }
 
-    function setMarkers(map) {
-      var baseUrl = 'images/';
+    function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+      const waypts = [];
+      const checkboxArray = document.getElementById("waypoints");
 
-      var image = {
-        url: '',
-        size: new google.maps.Size(30, 30),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(15, 15)
-      };
-
-      var shape = {
-        coords: [1,1,1,30,30,30,30,1],
-        type: 'poly'
-      };
-
-      for (var i = 0; i < places.length; i++) {
-        var place = places[i];
-        image.url = baseUrl + place[4];
-
-        var marker = new google.maps.Marker({
-          position: {
-            lat: place[0],
-            lng: place[1]
-          },
-          map: map,
-          icon: image,
-          shape: shape,
-          title: place[2],
-          zIndex: i + 1
-        });
-
-        var infoWindow = new google.maps.InfoWindow();
-        var content = place[3];
-
-        google.maps.event.addListener(marker, 'click', (function (marker, content, infoWindow){
-          return function () {
-            infoWindow.setContent(content);
-            infoWindow.open(map, marker);
-          }
-        }) (marker, content, infoWindow));
-      }
-    }
-
-    directionsDisplay = new google.maps.DirectionsRenderer();
-
-    var request = {
-        origin: new google.maps.LatLng(60.023539414725356,30.283663272857666), //точка старта
-        destination: new google.maps.LatLng(59.79530896374892,30.410317182540894), //точка финиша
-        travelMode: google.maps.DirectionsTravelMode.DRIVING //режим прокладки маршрута
-      };
-
-      directionsService.route(request, function(response, status) {
-        if (status == google.maps.DirectionsStatus.OK) {
-          directionsDisplay.setDirections(response);
+      for (let i = 0; i < checkboxArray.length; i++) {
+        if (checkboxArray.options[i].selected) {
+          waypts.push({
+            location: checkboxArray[i].value,
+            stopover: true
+          });
         }
-      });
+      }
+      directionsService.route(
+      {
+        origin: document.getElementById("start").value,
+        destination: document.getElementById("end").value,
+        waypoints: waypts,
+        optimizeWaypoints: true,
+        travelMode: google.maps.TravelMode.DRIVING
+      },
+      (response, status) => {
+        if (status === "OK") {
+          directionsRenderer.setDirections(response);
+          const route = response.routes[0];
+          const summaryPanel = document.getElementById("directions-panel");
+          summaryPanel.innerHTML = "";
 
-      directionsDisplay.setMap(map);
+          // For each route, display summary information.
+          for (let i = 0; i < route.legs.length; i++) {
+            const routeSegment = i + 1;
+            summaryPanel.innerHTML +=
+            "<b>Route Segment: " + routeSegment + "</b><br>";
+            summaryPanel.innerHTML += route.legs[i].start_address + " to ";
+            summaryPanel.innerHTML += route.legs[i].end_address + "<br>";
+            summaryPanel.innerHTML += route.legs[i].distance.text + "<br><br>";
+          }
+        } else {
+          window.alert("Directions request failed due to " + status);
+        }
+      }
+      );
+    }
   </script>
+  <style>
+    #right-panel {
+      font-family: "Roboto", "sans-serif";
+      line-height: 30px;
+      padding-left: 10px;
+    }
 
+    #right-panel select,
+    #right-panel input {
+      font-size: 15px;
+    }
+
+    #right-panel select {
+      width: 100%;
+    }
+
+    #right-panel i {
+      font-size: 12px;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      height: 100%;
+      float: left;
+      width: 70%;
+      height: 100%;
+    }
+
+    #right-panel {
+      margin: 20px;
+      border-width: 2px;
+      width: 20%;
+      height: 400px;
+      float: left;
+      text-align: left;
+      padding-top: 0;
+    }
+
+    #directions-panel {
+      margin-top: 10px;
+      background-color: #ffee77;
+      padding: 10px;
+      overflow: scroll;
+      height: 174px;
+    }
+  </style>
+
+  <div id="map"></div>
+  <div id="right-panel">
+    <div>
+      <b>Start:</b>
+      <select id="start">
+        <option value="48.597086, 35.271555">Goodzone, Днепр</option>
+      </select>
+      <br />
+      <b>Waypoints:</b> <br />
+      <i>(Ctrl+Click or Cmd+Click for multiple selection)</i> <br />
+      <select multiple id="waypoints">
+        <option value="50.301312, 34.897059">Ахтырка</option>
+        <option value="49.457650, 32.052206">Черкассы, Белый лотос</option>
+        <option value="49.816896, 30.054210">Белая Церковь - Полет на Шарах</option>
+        <option value="49.840456, 29.663380">Буки - Ландшафтный Парк</option>
+        <option value="50.479368, 29.215942">Радомышль - Замок</option>
+        <option value="50.316468, 29.093868">Коростышевский каньон</option>
+        <option value="50.039914, 28.683552">Домик Рыбака</option>
+        <option value="49.225138, 23.344169">Сходница - Валерия</option>
+        <option value="48.674056, 26.560941">Каменец-Подольский</option>
+        <option value="48.015547, 30.861197">Первомайск</option>
+      </select>
+      <br />
+      <b>End:</b>
+      <select id="end">
+        <option value="48.423978, 35.030299">Дом</option>
+      </select>
+      <br />
+      <input type="submit" id="submit" />
+    </div>
+    <div id="directions-panel"></div>
+  </div>
 </body>
 </html>
